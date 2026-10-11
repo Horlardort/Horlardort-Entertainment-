@@ -139,6 +139,20 @@ footer p { margin: 8px 0; }
   </section>
 
   <section id="explore">
+
+<div style="margin:20px 0;">
+  <label for="site-search" style="display:block;margin-bottom:8px;font-weight:bold;">
+    🔎 Search Horlardort Entertainment
+  </label>
+  <input
+    id="site-search"
+    type="search"
+    placeholder="Search comedy, Burna Boy, Nollywood..."
+    style="width:100%;padding:14px;border-radius:10px;border:1px solid #59436f;background:#1c142b;color:white;font-size:16px;"
+  >
+  <p id="search-message" aria-live="polite" style="color:#c6bdd5;"></p>
+</div>
+
     <h2 class="section-title">Explore Nigerian Entertainment 🇳🇬</h2>
     <p class="section-intro">
       Choose a category and discover more.
@@ -409,6 +423,27 @@ document.querySelectorAll("[data-filter]").forEach(function(button) {
 });
 
 document.getElementById("year").textContent = new Date().getFullYear();
+var siteSearch = document.getElementById("site-search");
+var searchMessage = document.getElementById("search-message");
+
+siteSearch.addEventListener("input", function () {
+  var query = siteSearch.value.trim().toLowerCase();
+  var cards = document.querySelectorAll(
+    "#explore .card, #creator-directory .card, #afrobeats .card"
+  );
+  var visibleCount = 0;
+
+  cards.forEach(function (card) {
+    var matches = card.textContent.toLowerCase().includes(query);
+    card.hidden = !matches;
+    if (matches) visibleCount++;
+  });
+
+  searchMessage.textContent = query
+    ? visibleCount + (visibleCount === 1 ? " result found." : " results found.")
+    : "";
+});
+
 </script>
 
 <script>
