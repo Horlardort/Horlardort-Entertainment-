@@ -482,9 +482,15 @@ if ("serviceWorker" in navigator) {
       autocomplete="new-password" placeholder="At least 8 characters"
       style="display:block;width:100%;box-sizing:border-box;padding:12px;margin:8px 0 16px;">
 
-    <button type="submit" style="padding:12px 18px;border:0;border-radius:8px;cursor:pointer;">
-      Create Account
-    </button>
+    
+<button type="submit" style="padding:12px 18px;border:0;border-radius:8px;cursor:pointer;">
+  Create Account
+</button>
+
+<button type="button" id="signin-button" style="padding:12px 18px;margin:8px;border:0;border-radius:8px;cursor:pointer;">
+  Sign In
+</button>
+
   </form>
 
   <p id="signup-message" role="status" aria-live="polite"></p>
@@ -531,6 +537,34 @@ if ("serviceWorker" in navigator) {
       ? "Account created! Welcome to Horlardort Entertainment."
       : "Account created! Check your email for a confirmation link.";
   });
+
+const signinButton = document.getElementById("signin-button");
+
+signinButton.addEventListener("click", async function () {
+  const email = document.getElementById("signup-email").value.trim();
+  const password = document.getElementById("signup-password").value;
+
+  if (!email || !password) {
+    signupMessage.textContent = "Enter your email and password first.";
+    return;
+  }
+
+  signupMessage.textContent = "Signing in...";
+
+  const { data, error } =
+    await horlardortSupabase.auth.signInWithPassword({
+      email: email,
+      password: password
+    });
+
+  if (error) {
+    signupMessage.textContent = error.message;
+    return;
+  }
+
+  signupMessage.textContent =
+    "You're signed in! Welcome back to Horlardort Entertainment.";
+});
 
 </script>
 
