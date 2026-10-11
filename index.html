@@ -467,6 +467,29 @@ if ("serviceWorker" in navigator) {
   </a>
 </section>
  
+<section id="member-account" style="max-width:420px;margin:30px auto;padding:20px;background:#211638;border-radius:16px;color:white;">
+  <h2>Join Horlardort Entertainment</h2>
+  <p>Create an account to join the community.</p>
+
+  <form id="signup-form">
+    <label for="signup-email">Email address</label>
+    <input id="signup-email" type="email" required autocomplete="email"
+      placeholder="Enter your email"
+      style="display:block;width:100%;box-sizing:border-box;padding:12px;margin:8px 0 16px;">
+
+    <label for="signup-password">Password</label>
+    <input id="signup-password" type="password" required minlength="8"
+      autocomplete="new-password" placeholder="At least 8 characters"
+      style="display:block;width:100%;box-sizing:border-box;padding:12px;margin:8px 0 16px;">
+
+    <button type="submit" style="padding:12px 18px;border:0;border-radius:8px;cursor:pointer;">
+      Create Account
+    </button>
+  </form>
+
+  <p id="signup-message" role="status" aria-live="polite"></p>
+</section>
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
@@ -479,6 +502,32 @@ if ("serviceWorker" in navigator) {
   );
 
   console.log("Horlardort Entertainment connected to Supabase!");
+  const signupForm = document.getElementById("signup-form");
+  const signupMessage = document.getElementById("signup-message");
+
+  signupForm.addEventListener("submit", async function (event) {
+    event.preventDefault();
+
+    const email = document.getElementById("signup-email").value.trim();
+    const password = document.getElementById("signup-password").value;
+
+    signupMessage.textContent = "Creating your account...";
+
+    const { data, error } = await horlardortSupabase.auth.signUp({
+      email: email,
+      password: password
+    });
+
+    if (error) {
+      signupMessage.textContent = error.message;
+      return;
+    }
+
+    signupMessage.textContent = data.session
+      ? "Account created! Welcome to Horlardort Entertainment."
+      : "Account created! Check your email for a confirmation link.";
+  });
+
 </script>
 
 </body>
