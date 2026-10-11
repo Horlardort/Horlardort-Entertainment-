@@ -499,75 +499,84 @@ if ("serviceWorker" in navigator) {
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
-  
 const SUPABASE_URL = "https://ewlefcdktsffdljcaqje.supabase.co";
-const SUPABASE_PUBLISHABLE_KEY ="sb_publishable_5XeCzZBYZ9bLt4z1S6xY5w_CIegM0VC";
 
-const horlardortSupabase = window.supabase.createClient(
-  SUPABASE_URL,
-  SUPABASE_PUBLISHABLE_KEY
-);
+// Keep your existing publishable key between these quotes.
+const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_5XeCzZBYZ9bLt4z1S6xY5w_CIegM0VC";
 
 const signupForm = document.getElementById("signup-form");
 const signupMessage = document.getElementById("signup-message");
 const signinButton = document.getElementById("signin-button");
 
-console.log("Horlardort Entertainment Supabase initialized.");
+if (!window.supabase) {
+  signupMessage.textContent =
+    "Connection library failed to load. Refresh the page and try again.";
+} else {
+  const horlardortSupabase = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_PUBLISHABLE_KEY
+  );
 
-signupForm.addEventListener("submit", async function (event) {
-  event.preventDefault();
+  signupForm.addEventListener("submit", async function (event) {
+    event.preventDefault();
 
-  const email = document.getElementById("signup-email").value.trim();
-  const password = document.getElementById("signup-password").value;
+    const email = document.getElementById("signup-email").value.trim();
+    const password = document.getElementById("signup-password").value;
 
-  signupMessage.textContent = "Creating your account...";
+    signupMessage.textContent = "Creating your account...";
 
-  const { data, error } = await horlardortSupabase.auth.signUp({
-    email: email,
-    password: password,
-    options: {
-      emailRedirectTo:
-        "https://horlardort.github.io/Horlardort-Entertainment-/"
+    try {
+      const { data, error } = await horlardortSupabase.auth.signUp({
+        email,
+        password,
+        options: {
+          emailRedirectTo:
+            "https://horlardort.github.io/Horlardort-Entertainment-/"
+        }
+      });
+
+      if (error) throw error;
+
+      signupMessage.textContent = data.session
+        ? "Account created! Welcome to Horlardort Entertainment."
+        : "Account created! Check your email for a confirmation link.";
+    } catch (error) {
+      signupMessage.textContent =
+        "Account creation failed: " + error.message;
     }
   });
 
-  if (error) {
-    signupMessage.textContent = error.message;
-    return;
-  }
+  signinButton.addEventListener("click", async function () {
+    const email = document.getElementById("signup-email").value.trim();
+    const password = document.getElementById("signup-password").value;
 
-  signupMessage.textContent = data.session
-    ? "Account created! Welcome to Horlardort Entertainment."
-    : "Account created! Check your email for a confirmation link.";
-});
+    if (!email || !password) {
+      signupMessage.textContent =
+        "Enter your email and password first.";
+      return;
+    }
 
-signinButton.addEventListener("click", async function () {
-  const email = document.getElementById("signup-email").value.trim();
-  const password = document.getElementById("signup-password").value;
+    signupMessage.textContent = "Signing in...";
 
-  if (!email || !password) {
-    signupMessage.textContent = "Enter your email and password first.";
-    return;
-  }
+    try {
+      const { error } =
+        await horlardortSupabase.auth.signInWithPassword({
+          email,
+          password
+        });
 
-  signupMessage.textContent = "Signing in...";
+      if (error) throw error;
 
-  const { data, error } =
-    await horlardortSupabase.auth.signInWithPassword({
-      email: email,
-      password: password
-    });
-
-  if (error) {
-    signupMessage.textContent = error.message;
-    return;
-  }
-
-  signupMessage.textContent =
-    "You're signed in! Welcome back to Horlardort Entertainment.";
-});
-
+      signupMessage.textContent =
+        "You're signed in! Welcome back to Horlardort Entertainment.";
+    } catch (error) {
+      signupMessage.textContent =
+        "Sign-in failed: " + error.message;
+    }
+  });
+}
 </script>
+
 
 </body>
 </html>
