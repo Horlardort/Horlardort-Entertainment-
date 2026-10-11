@@ -499,46 +499,47 @@ if ("serviceWorker" in navigator) {
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
-  const SUPABASE_URL = "https://ewlefcdktsffdljcaqje.supabase.co";
-  const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_5XeCzZBYZ9bLt4z1S6xY5w_CIegM0VC";
+  
+const SUPABASE_URL = "https://ewlefcdktsffdljcaqje.supabase.co";
+const SUPABASE_PUBLISHABLE_KEY =sb_publishable_5XeCzZBYZ9bLt4z1S6xY5w_CIegM0VC;
 
- const { data, error } = await horlardortSupabase.auth.signUp({
-  email: email,
-  password: password,
-  options: {
-    emailRedirectTo: "https://horlardort.github.io/Horlardort-Entertainment-/"
-  }
-});
-  );
+const horlardortSupabase = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_PUBLISHABLE_KEY
+);
 
-  console.log("Horlardort Entertainment connected to Supabase!");
-  const signupForm = document.getElementById("signup-form");
-  const signupMessage = document.getElementById("signup-message");
+const signupForm = document.getElementById("signup-form");
+const signupMessage = document.getElementById("signup-message");
+const signinButton = document.getElementById("signin-button");
 
-  signupForm.addEventListener("submit", async function (event) {
-    event.preventDefault();
+console.log("Horlardort Entertainment Supabase initialized.");
 
-    const email = document.getElementById("signup-email").value.trim();
-    const password = document.getElementById("signup-password").value;
+signupForm.addEventListener("submit", async function (event) {
+  event.preventDefault();
 
-    signupMessage.textContent = "Creating your account...";
+  const email = document.getElementById("signup-email").value.trim();
+  const password = document.getElementById("signup-password").value;
 
-    const { data, error } = await horlardortSupabase.auth.signUp({
-      email: email,
-      password: password
-    });
+  signupMessage.textContent = "Creating your account...";
 
-    if (error) {
-      signupMessage.textContent = error.message;
-      return;
+  const { data, error } = await horlardortSupabase.auth.signUp({
+    email: email,
+    password: password,
+    options: {
+      emailRedirectTo:
+        "https://horlardort.github.io/Horlardort-Entertainment-/"
     }
-
-    signupMessage.textContent = data.session
-      ? "Account created! Welcome to Horlardort Entertainment."
-      : "Account created! Check your email for a confirmation link.";
   });
 
-const signinButton = document.getElementById("signin-button");
+  if (error) {
+    signupMessage.textContent = error.message;
+    return;
+  }
+
+  signupMessage.textContent = data.session
+    ? "Account created! Welcome to Horlardort Entertainment."
+    : "Account created! Check your email for a confirmation link.";
+});
 
 signinButton.addEventListener("click", async function () {
   const email = document.getElementById("signup-email").value.trim();
