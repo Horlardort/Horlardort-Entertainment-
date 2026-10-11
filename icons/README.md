@@ -1,0 +1,1 @@
+Horlardort Entertainment app icons will be stored in this folder.
