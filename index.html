@@ -496,9 +496,13 @@ if ("serviceWorker" in navigator) {
   const SUPABASE_URL = "https://ewlefcdktsffdljcaqje.supabase.co";
   const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_5XeCzZBYZ9bLt4z1S6xY5w_CIegM0VC";
 
-  const horlardortSupabase = window.supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_PUBLISHABLE_KEY
+ const { data, error } = await horlardortSupabase.auth.signUp({
+  email: email,
+  password: password,
+  options: {
+    emailRedirectTo: "https://horlardort.github.io/Horlardort-Entertainment-/"
+  }
+});
   );
 
   console.log("Horlardort Entertainment connected to Supabase!");
