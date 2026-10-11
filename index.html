@@ -3,233 +3,262 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#100b20">
-<meta name="description" content="Horlardort Entertainment — funny videos, skits and African comedy.">
-<title>Horlardort Entertainment</title>
+<meta name="theme-color" content="#100b1c">
+<meta name="description" content="Horlardort Entertainment — Your home for Nigerian comedy, skits, music, Nollywood and viral entertainment.">
+<title>Horlardort Entertainment | Nigerian Entertainment</title>
 <style>
 :root {
-  --bg: #100b20;
-  --panel: #1c1530;
-  --purple: #9b5cff;
+  --bg: #100b1c;
+  --panel: #1c142b;
+  --purple: #a855f7;
   --text: #ffffff;
-  --muted: #c4bbd6;
+  --muted: #c6bdd5;
 }
 * { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
 body {
   margin: 0;
+  font-family: Arial, sans-serif;
   background: var(--bg);
   color: var(--text);
-  font-family: Arial, sans-serif;
-}
-header {
-  padding: 20px;
-  background: #19102c;
-  border-bottom: 1px solid #382650;
-}
-.brand { font-size: 23px; font-weight: 900; }
-.brand span { color: var(--purple); }
-header p { color: var(--muted); margin-bottom: 0; }
-nav {
-  display: flex;
-  gap: 10px;
-  padding: 14px;
-  overflow-x: auto;
-}
-button, .button {
-  border: 0;
-  border-radius: 20px;
-  padding: 11px 16px;
-  background: var(--panel);
-  color: white;
-  font-weight: bold;
-  cursor: pointer;
-  text-decoration: none;
-  white-space: nowrap;
-}
-button.active, .primary {
-  background: var(--purple);
-  color: #160b27;
-}
-main { padding: 16px; max-width: 850px; margin: auto; }
-.hero {
-  padding: 26px 20px;
-  border-radius: 20px;
-  background: linear-gradient(135deg,#44206e,#20133a 70%);
-}
-.hero h1 { font-size: 32px; margin: 0 0 12px; }
-.hero p { line-height: 1.6; color: #eee4ff; }
-h2 { margin-top: 28px; }
-.grid {
-  display: grid;
-  grid-template-columns: repeat(2,minmax(0,1fr));
-  gap: 12px;
-}
-.card {
-  overflow: hidden;
-  background: var(--panel);
-  border: 1px solid #382650;
-  border-radius: 16px;
-}
-.thumb {
-  min-height: 105px;
-  display: grid;
-  place-items: center;
-  font-size: 36px;
-  background: linear-gradient(135deg,#42245f,#201431);
-}
-.card-content { padding: 12px; }
-.card h3 { font-size: 16px; margin: 0 0 8px; }
-.card p { font-size: 13px; color: var(--muted); line-height: 1.5; }
-.card a { color: #d2aaff; font-weight: bold; font-size: 13px; }
-.notice {
-  padding: 14px;
-  border-radius: 12px;
-  background: #201831;
-  color: var(--muted);
   line-height: 1.6;
 }
-footer {
-  margin-top: 35px;
-  padding: 25px 16px;
-  text-align: center;
-  background: #19102c;
-  color: var(--muted);
-  font-size: 13px;
+header {
+  padding: 18px 6%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  border-bottom: 1px solid #382747;
 }
-@media(min-width:600px) {
-  .grid { grid-template-columns: repeat(3,minmax(0,1fr)); }
-  .hero h1 { font-size: 42px; }
+.brand { font-size: 21px; font-weight: 900; letter-spacing: 1px; }
+.brand span { color: var(--purple); }
+nav { display: flex; gap: 16px; flex-wrap: wrap; }
+nav a, footer a { color: var(--muted); text-decoration: none; }
+nav a:hover, footer a:hover { color: white; }
+.hero {
+  padding: 70px 6%;
+  text-align: center;
+  background: radial-gradient(ellipse at top, #48216b, #100b1c 70%);
+}
+.eyebrow {
+  color: #d8b4fe;
+  font-size: 13px;
+  letter-spacing: 3px;
+  font-weight: bold;
+}
+h1 { font-size: clamp(34px, 8vw, 60px); line-height: 1.1; margin: 16px 0; }
+h1 span { color: #c084fc; }
+.hero p { max-width: 620px; margin: 0 auto 24px; color: var(--muted); }
+.btn {
+  display: inline-block;
+  background: var(--purple);
+  color: white;
+  padding: 12px 20px;
+  border-radius: 9px;
+  text-decoration: none;
+  font-weight: bold;
+}
+section { padding: 36px 6%; }
+.section-title { font-size: 27px; margin: 0 0 6px; }
+.section-intro { color: var(--muted); margin: 0 0 22px; }
+.filters { display: flex; flex-wrap: wrap; gap: 9px; margin: 20px 0; }
+.filters button {
+  border: 1px solid #59436f;
+  background: var(--panel);
+  color: white;
+  padding: 9px 14px;
+  border-radius: 22px;
+  cursor: pointer;
+}
+.filters button.active, .filters button:hover {
+  background: var(--purple);
+  border-color: var(--purple);
+}
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 17px;
+}
+.card {
+  background: var(--panel);
+  border: 1px solid #352442;
+  border-radius: 14px;
+  padding: 20px;
+}
+.card .emoji { font-size: 34px; }
+.card h3 { margin: 8px 0; }
+.card p { color: var(--muted); font-size: 14px; }
+.card a { color: #d8b4fe; font-weight: bold; text-decoration: none; }
+.originals {
+  background: linear-gradient(120deg, #29143f, #171020);
+  border: 1px solid #54326b;
+  border-radius: 16px;
+  padding: 26px;
+}
+.originals h2 { margin-top: 0; }
+footer {
+  border-top: 1px solid #382747;
+  padding: 28px 6%;
+  color: var(--muted);
+  text-align: center;
+}
+footer p { margin: 8px 0; }
+@media (max-width: 480px) {
+  header { align-items: flex-start; }
+  nav { gap: 12px; font-size: 14px; }
+  .hero { padding: 52px 6%; }
 }
 </style>
 </head>
 <body>
+
 <header>
   <div class="brand">HORLARDORT <span>ENTERTAINMENT</span></div>
-  <p>Good vibes. Funny moments. Pure entertainment.</p>
+  <nav>
+    <a href="#home">Home</a>
+    <a href="#explore">Explore</a>
+    <a href="#originals">My Originals</a>
+    <a href="#about">About</a>
+  </nav>
 </header>
 
-<nav aria-label="Entertainment categories">
-  <button class="active" data-filter="all">All</button>
-  <button data-filter="comedy">Comedy</button>
-  <button data-filter="skits">Skits</button>
-  <button data-filter="african">African Fun</button>
-</nav>
-
 <main>
-  <section class="hero">
-    <h1>Welcome to the fun side!</h1>
-    <p>Your home for comedy, creative skits and entertaining moments. Discover something funny and share the laughter.</p>
-    <button class="primary" id="share">Share with friends ↗</button>
+  <section class="hero" id="home">
+    <div class="eyebrow">WELCOME TO HORLARDORT ENTERTAINMENT</div>
+    <h1>Your Home for <span>Nigerian Entertainment.</span></h1>
+    <p>
+      Discover Nigerian comedy, hilarious skits, music, Nollywood,
+      viral trends and talented creators — all in one place.
+    </p>
+    <a class="btn" href="#explore">Explore Entertainment</a>
   </section>
 
-  <h2>Explore Entertainment</h2>
-  <p class="notice">Your entertainment hub is getting started! Choose a category and explore videos on YouTube. More original Horlardort content can be added here.</p>
+  <section id="explore">
+    <h2 class="section-title">Explore Nigerian Entertainment 🇳🇬</h2>
+    <p class="section-intro">
+      Choose a category and discover more.
+    </p>
 
-  <div class="grid" id="videos">
-    <article class="card" data-category="comedy">
-      <div class="thumb">😂</div>
-      <div class="card-content">
-        <h3>Funny Comedy Videos</h3>
-        <p>Find something to make you laugh.</p>
-        <a href="https://www.youtube.com/results?search_query=Nigerian+comedy" target="_blank" rel="noopener">Explore comedy ↗</a>
-      </div>
-    </article>
+    <div class="filters">
+      <button class="active" data-filter="all">All</button>
+      <button data-filter="comedy">Comedy</button>
+      <button data-filter="skits">Skits</button>
+      <button data-filter="music">Music</button>
+      <button data-filter="nollywood">Nollywood</button>
+      <button data-filter="viral">Viral Trends</button>
+    </div>
 
-    <article class="card" data-category="skits">
-      <div class="thumb">🎬</div>
-      <div class="card-content">
+    <div class="grid">
+      <article class="card" data-category="comedy">
+        <div class="emoji">😂</div>
+        <h3>Nigerian Comedy</h3>
+        <p>Discover funny moments and comedy from Nigeria.</p>
+        <a href="https://www.youtube.com/results?search_query=Nigerian+comedy"
+           target="_blank" rel="noopener">Explore comedy →</a>
+      </article>
+
+      <article class="card" data-category="skits">
+        <div class="emoji">🎬</div>
         <h3>Comedy Skits</h3>
-        <p>Short stories and hilarious situations.</p>
-        <a href="https://www.youtube.com/results?search_query=Nigerian+comedy+skits" target="_blank" rel="noopener">Watch skits ↗</a>
-      </div>
-    </article>
+        <p>Find skit creators and entertaining short videos.</p>
+        <a href="https://www.youtube.com/results?search_query=Nigerian+comedy+skits"
+           target="_blank" rel="noopener">Explore skits →</a>
+      </article>
 
-    <article class="card" data-category="african">
-      <div class="thumb">🇳🇬</div>
-      <div class="card-content">
-        <h3>African Entertainment</h3>
-        <p>Discover comedy and creative talent.</p>
-        <a href="https://www.youtube.com/results?search_query=African+comedy" target="_blank" rel="noopener">Explore videos ↗</a>
-      </div>
-    </article>
+      <article class="card" data-category="music">
+        <div class="emoji">🎵</div>
+        <h3>Nigerian Music</h3>
+        <p>Explore Afrobeats, music discoveries and performances.</p>
+        <a href="https://www.youtube.com/results?search_query=Nigerian+music"
+           target="_blank" rel="noopener">Explore music →</a>
+      </article>
 
-    <article class="card" data-category="comedy">
-      <div class="thumb">🤣</div>
-      <div class="card-content">
-        <h3>Trending Funny Moments</h3>
-        <p>Explore comedy people are enjoying.</p>
-        <a href="https://www.youtube.com/results?search_query=funny+comedy+videos" target="_blank" rel="noopener">Find videos ↗</a>
-      </div>
-    </article>
+      <article class="card" data-category="nollywood">
+        <div class="emoji">🎥</div>
+        <h3>Nollywood</h3>
+        <p>Discover Nigerian film trailers and entertainment.</p>
+        <a href="https://www.youtube.com/results?search_query=Nollywood+trailers"
+           target="_blank" rel="noopener">Explore Nollywood →</a>
+      </article>
 
-    <article class="card" data-category="skits">
-      <div class="thumb">🎭</div>
-      <div class="card-content">
-        <h3>Creative Stories</h3>
-        <p>Get inspired by entertaining skits.</p>
-        <a href="https://www.youtube.com/results?search_query=African+short+comedy+films" target="_blank" rel="noopener">Explore stories ↗</a>
-      </div>
-    </article>
+      <article class="card" data-category="viral">
+        <div class="emoji">🔥</div>
+        <h3>Viral Trends</h3>
+        <p>Explore trending Nigerian entertainment and popular topics.</p>
+        <a href="https://www.youtube.com/results?search_query=Nigerian+viral+videos"
+           target="_blank" rel="noopener">Explore trends →</a>
+      </article>
 
-    <article class="card" data-category="african">
-      <div class="thumb">✨</div>
-      <div class="card-content">
-        <h3>Horlardort Originals</h3>
-        <p>Original content by Horlardort coming soon.</p>
-        <a href="https://www.youtube.com/" target="_blank" rel="noopener">Explore YouTube ↗</a>
-      </div>
-    </article>
-  </div>
+      <article class="card" data-category="comedy skits">
+        <div class="emoji">🌟</div>
+        <h3>Discover Creators</h3>
+        <p>Find more Nigerian creators and their original work.</p>
+        <a href="https://www.youtube.com/results?search_query=Nigerian+content+creators"
+           target="_blank" rel="noopener">Discover creators →</a>
+      </article>
+    </div>
+  </section>
 
-  <h2>About Us</h2>
-  <p class="notice">Horlardort Entertainment celebrates creativity, humour and entertaining stories. Our goal is to bring people together through laughter and original content.</p>
+  <section id="originals">
+    <div class="originals">
+      <div class="eyebrow">THE CREATOR BEHIND THE BRAND</div>
+      <h2>Horlardort Originals 🎭</h2>
+      <p>
+        This is the home of Horlardort's own creative work,
+        original skits, funny videos and entertainment projects.
+      </p>
+      <p>Original ideas. Nigerian creativity. The Horlardort identity.</p>
+    </div>
+  </section>
 
-  <h2>Join the Movement</h2>
-  <p>Enjoying the website? Share it with friends and help our entertainment community grow.</p>
-  <button class="primary" id="share2">Share Horlardort ↗</button>
+  <section id="about">
+    <h2 class="section-title">About Horlardort Entertainment</h2>
+    <p>
+      Horlardort Entertainment is a Nigerian entertainment brand
+      created to help audiences discover comedy, skits, music,
+      Nollywood and talented content creators, while showcasing
+      Horlardort Originals.
+    </p>
+    <p>
+      We aim to celebrate creativity and connect people through
+      entertainment.
+    </p>
+  </section>
 </main>
 
 <footer>
-  <strong>HORLARDORT ENTERTAINMENT</strong>
-  <p>Funny videos • Skits • Creativity</p>
-  <p>© <span id="year"></span> Horlardort. All rights reserved.</p>
+  <div class="brand">HORLARDORT <span>ENTERTAINMENT</span></div>
+  <p>Your Home for Nigerian Entertainment 🇳🇬</p>
+  <p>
+    <a href="https://www.tiktok.com/@officialhorlardort31"
+       target="_blank" rel="noopener">TikTok</a>
+    &nbsp; | &nbsp;
+    <a href="https://www.instagram.com/Horlardort31/"
+       target="_blank" rel="noopener">Instagram</a>
+  </p>
+  <p>© <span id="year"></span> Horlardort Entertainment</p>
 </footer>
 
 <script>
-document.querySelectorAll("[data-filter]").forEach(button => {
-  button.addEventListener("click", () => {
-    document.querySelectorAll("[data-filter]").forEach(b => b.classList.remove("active"));
+document.querySelectorAll("[data-filter]").forEach(function(button) {
+  button.addEventListener("click", function() {
+    document.querySelectorAll("[data-filter]").forEach(function(item) {
+      item.classList.remove("active");
+    });
     button.classList.add("active");
-    document.querySelectorAll("#videos .card").forEach(card => {
-      card.hidden = button.dataset.filter !== "all" &&
-                    card.dataset.category !== button.dataset.filter;
+
+    var filter = button.dataset.filter;
+    document.querySelectorAll("[data-category]").forEach(function(card) {
+      var categories = card.dataset.category.split(" ");
+      card.hidden = filter !== "all" && !categories.includes(filter);
     });
   });
 });
 
-async function shareSite() {
-  if (navigator.share) {
-    try {
-      await navigator.share({
-        title: "Horlardort Entertainment",
-        text: "Discover funny videos and skits with Horlardort Entertainment!",
-        url: location.href
-      });
-    } catch (error) {}
-  } else if (navigator.clipboard) {
-    try {
-      await navigator.clipboard.writeText(location.href);
-      alert("Website link copied!");
-    } catch (error) {
-      prompt("Copy your website link:", location.href);
-    }
-  } else {
-    prompt("Copy your website link:", location.href);
-  }
-}
-document.getElementById("share").addEventListener("click", shareSite);
-document.getElementById("share2").addEventListener("click", shareSite);
 document.getElementById("year").textContent = new Date().getFullYear();
 </script>
+
 </body>
-  </html>
+</html>
