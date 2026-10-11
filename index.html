@@ -1,0 +1,238 @@
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#100b20">
+<meta name="description" content="Horlardort Entertainment — funny videos, skits and African comedy.">
+<title>Horlardort Entertainment</title>
+<style>
+:root {
+  --bg: #100b20;
+  --panel: #1c1530;
+  --purple: #9b5cff;
+  --text: #ffffff;
+  --muted: #c4bbd6;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: Arial, sans-serif;
+}
+header {
+  padding: 20px;
+  background: #19102c;
+  border-bottom: 1px solid #382650;
+}
+.brand { font-size: 23px; font-weight: 900; }
+.brand span { color: var(--purple); }
+header p { color: var(--muted); margin-bottom: 0; }
+nav {
+  display: flex;
+  gap: 10px;
+  padding: 14px;
+  overflow-x: auto;
+}
+button, .button {
+  border: 0;
+  border-radius: 20px;
+  padding: 11px 16px;
+  background: var(--panel);
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  text-decoration: none;
+  white-space: nowrap;
+}
+button.active, .primary {
+  background: var(--purple);
+  color: #160b27;
+}
+main { padding: 16px; max-width: 850px; margin: auto; }
+.hero {
+  padding: 26px 20px;
+  border-radius: 20px;
+  background: linear-gradient(135deg,#44206e,#20133a 70%);
+}
+.hero h1 { font-size: 32px; margin: 0 0 12px; }
+.hero p { line-height: 1.6; color: #eee4ff; }
+h2 { margin-top: 28px; }
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2,minmax(0,1fr));
+  gap: 12px;
+}
+.card {
+  overflow: hidden;
+  background: var(--panel);
+  border: 1px solid #382650;
+  border-radius: 16px;
+}
+.thumb {
+  min-height: 105px;
+  display: grid;
+  place-items: center;
+  font-size: 36px;
+  background: linear-gradient(135deg,#42245f,#201431);
+}
+.card-content { padding: 12px; }
+.card h3 { font-size: 16px; margin: 0 0 8px; }
+.card p { font-size: 13px; color: var(--muted); line-height: 1.5; }
+.card a { color: #d2aaff; font-weight: bold; font-size: 13px; }
+.notice {
+  padding: 14px;
+  border-radius: 12px;
+  background: #201831;
+  color: var(--muted);
+  line-height: 1.6;
+}
+footer {
+  margin-top: 35px;
+  padding: 25px 16px;
+  text-align: center;
+  background: #19102c;
+  color: var(--muted);
+  font-size: 13px;
+}
+@media(min-width:600px) {
+  .grid { grid-template-columns: repeat(3,minmax(0,1fr)); }
+  .hero h1 { font-size: 42px; }
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand">HORLARDORT <span>ENTERTAINMENT</span></div>
+  <p>Good vibes. Funny moments. Pure entertainment.</p>
+</header>
+
+<nav aria-label="Entertainment categories">
+  <button class="active" data-filter="all">All</button>
+  <button data-filter="comedy">Comedy</button>
+  <button data-filter="skits">Skits</button>
+  <button data-filter="african">African Fun</button>
+</nav>
+
+<main>
+  <section class="hero">
+    <h1>Welcome to the fun side!</h1>
+    <p>Your home for comedy, creative skits and entertaining moments. Discover something funny and share the laughter.</p>
+    <button class="primary" id="share">Share with friends ↗</button>
+  </section>
+
+  <h2>Explore Entertainment</h2>
+  <p class="notice">Your entertainment hub is getting started! Choose a category and explore videos on YouTube. More original Horlardort content can be added here.</p>
+
+  <div class="grid" id="videos">
+    <article class="card" data-category="comedy">
+      <div class="thumb">😂</div>
+      <div class="card-content">
+        <h3>Funny Comedy Videos</h3>
+        <p>Find something to make you laugh.</p>
+        <a href="https://www.youtube.com/results?search_query=Nigerian+comedy" target="_blank" rel="noopener">Explore comedy ↗</a>
+      </div>
+    </article>
+
+    <article class="card" data-category="skits">
+      <div class="thumb">🎬</div>
+      <div class="card-content">
+        <h3>Comedy Skits</h3>
+        <p>Short stories and hilarious situations.</p>
+        <a href="https://www.youtube.com/results?search_query=Nigerian+comedy+skits" target="_blank" rel="noopener">Watch skits ↗</a>
+      </div>
+    </article>
+
+    <article class="card" data-category="african">
+      <div class="thumb">🇳🇬</div>
+      <div class="card-content">
+        <h3>African Entertainment</h3>
+        <p>Discover comedy and creative talent.</p>
+        <a href="https://www.youtube.com/results?search_query=African+comedy" target="_blank" rel="noopener">Explore videos ↗</a>
+      </div>
+    </article>
+
+    <article class="card" data-category="comedy">
+      <div class="thumb">🤣</div>
+      <div class="card-content">
+        <h3>Trending Funny Moments</h3>
+        <p>Explore comedy people are enjoying.</p>
+        <a href="https://www.youtube.com/results?search_query=funny+comedy+videos" target="_blank" rel="noopener">Find videos ↗</a>
+      </div>
+    </article>
+
+    <article class="card" data-category="skits">
+      <div class="thumb">🎭</div>
+      <div class="card-content">
+        <h3>Creative Stories</h3>
+        <p>Get inspired by entertaining skits.</p>
+        <a href="https://www.youtube.com/results?search_query=African+short+comedy+films" target="_blank" rel="noopener">Explore stories ↗</a>
+      </div>
+    </article>
+
+    <article class="card" data-category="african">
+      <div class="thumb">✨</div>
+      <div class="card-content">
+        <h3>Horlardort Originals</h3>
+        <p>Original content by Horlardort coming soon.</p>
+        <a href="https://www.youtube.com/" target="_blank" rel="noopener">Explore YouTube ↗</a>
+      </div>
+    </article>
+  </div>
+
+  <h2>About Us</h2>
+  <p class="notice">Horlardort Entertainment celebrates creativity, humour and entertaining stories. Our goal is to bring people together through laughter and original content.</p>
+
+  <h2>Join the Movement</h2>
+  <p>Enjoying the website? Share it with friends and help our entertainment community grow.</p>
+  <button class="primary" id="share2">Share Horlardort ↗</button>
+</main>
+
+<footer>
+  <strong>HORLARDORT ENTERTAINMENT</strong>
+  <p>Funny videos • Skits • Creativity</p>
+  <p>© <span id="year"></span> Horlardort. All rights reserved.</p>
+</footer>
+
+<script>
+document.querySelectorAll("[data-filter]").forEach(button => {
+  button.addEventListener("click", () => {
+    document.querySelectorAll("[data-filter]").forEach(b => b.classList.remove("active"));
+    button.classList.add("active");
+    document.querySelectorAll("#videos .card").forEach(card => {
+      card.hidden = button.dataset.filter !== "all" &&
+                    card.dataset.category !== button.dataset.filter;
+    });
+  });
+});
+
+async function shareSite() {
+  if (navigator.share) {
+    try {
+      await navigator.share({
+        title: "Horlardort Entertainment",
+        text: "Discover funny videos and skits with Horlardort Entertainment!",
+        url: location.href
+      });
+    } catch (error) {}
+  } else if (navigator.clipboard) {
+    try {
+      await navigator.clipboard.writeText(location.href);
+      alert("Website link copied!");
+    } catch (error) {
+      prompt("Copy your website link:", location.href);
+    }
+  } else {
+    prompt("Copy your website link:", location.href);
+  }
+}
+document.getElementById("share").addEventListener("click", shareSite);
+document.getElementById("share2").addEventListener("click", shareSite);
+document.getElementById("year").textContent = new Date().getFullYear();
+</script>
+</body>
+</html>
