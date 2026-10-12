@@ -114,9 +114,13 @@ footer p { margin: 8px 0; }
 }
 </style>
 </head>
+
 <body>
 
+<div id="main-site" hidden>
+
 <header>
+
   <div class="brand">HORLARDORT <span>ENTERTAINMENT</span></div>
   <nav>
     <a href="#home">Home</a>
@@ -456,16 +460,6 @@ if ("serviceWorker" in navigator) {
   });
 }
 </script>
-<section style="padding:30px 20px;text-align:center;background:#160d27;color:white;border-radius:16px;margin:20px 0;">
-  <h2>🎬 Submit Your Video</h2>
-  <p>Are you a Nigerian creator? Submit your video for consideration on Horlardort Entertainment!</p>
-  <a href="https://forms.gle/98BpTcYD14bog4Sk7"
-     target="_blank"
-     rel="noopener noreferrer"
-     style="display:inline-block;background:#a855f7;color:white;padding:14px 24px;border-radius:10px;text-decoration:none;font-weight:bold;">
-    Submit Your Video
-  </a>
-</section>
  
 <section id="member-account" style="max-width:420px;margin:30px auto;padding:20px;background:#211638;border-radius:16px;color:white;">
   <h2>Join Horlardort Entertainment</h2>
@@ -498,6 +492,7 @@ if ("serviceWorker" in navigator) {
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
+
 <script>
 const SUPABASE_URL = "https://ewlefcdktsffdljcaqje.supabase.co";
 
@@ -507,48 +502,83 @@ const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_5XeCzZBYZ9bLt4z1S6xY5w_CIegM0VC
 const signupForm = document.getElementById("signup-form");
 const signupMessage = document.getElementById("signup-message");
 const signinButton = document.getElementById("signin-button");
+const mainSite = document.getElementById("main-site");
+const memberAccount = document.getElementById("member-account");
+
+function updatePage(session) {
+  const signedIn = Boolean(session);
+  mainSite.hidden = !signedIn;
+  memberAccount.hidden = signedIn;
+}
 
 if (!window.supabase) {
   signupMessage.textContent =
-    "Connection library failed to load. Refresh the page and try again.";
+    "Connection failed. Refresh the page and try again.";
 } else {
   const horlardortSupabase = window.supabase.createClient(
     SUPABASE_URL,
     SUPABASE_PUBLISHABLE_KEY
   );
 
-  signupForm.addEventListener("submit", async function (event) {
+  horlardortSupabase.auth.getSession().then(({ data, error }) => {
+    if (error) {
+      signupMessage.textContent =
+        "Could not check sign-in status. Please refresh.";
+      updatePage(null);
+      return;
+    }
+
+    updatePage(data.session);
+  });
+
+  horlardortSupabase.auth.onAuthStateChange(
+    (_event, session) => {
+      updatePage(session);
+    }
+  );
+
+  signupForm.addEventListener("submit", async (event) => {
     event.preventDefault();
 
-    const email = document.getElementById("signup-email").value.trim();
-    const password = document.getElementById("signup-password").value;
+    const email =
+      document.getElementById("signup-email").value.trim();
+    const password =
+      document.getElementById("signup-password").value;
 
     signupMessage.textContent = "Creating your account...";
 
     try {
-      const { data, error } = await horlardortSupabase.auth.signUp({
-        email,
-        password,
-        options: {
-          emailRedirectTo:
-            "https://horlardort.github.io/Horlardort-Entertainment-/"
-        }
-      });
+      const { data, error } =
+        await horlardortSupabase.auth.signUp({
+          email,
+          password,
+          options: {
+            emailRedirectTo:
+              "https://horlardort.github.io/Horlardort-Entertainment-/"
+          }
+        });
 
       if (error) throw error;
 
-      signupMessage.textContent = data.session
-        ? "Account created! Welcome to Horlardort Entertainment."
-        : "Account created! Check your email for a confirmation link.";
+      if (data.session) {
+        updatePage(data.session);
+        signupMessage.textContent =
+          "Welcome to Horlardort Entertainment!";
+      } else {
+        signupMessage.textContent =
+          "Account created! Check your email to confirm your account, then sign in.";
+      }
     } catch (error) {
       signupMessage.textContent =
         "Account creation failed: " + error.message;
     }
   });
 
-  signinButton.addEventListener("click", async function () {
-    const email = document.getElementById("signup-email").value.trim();
-    const password = document.getElementById("signup-password").value;
+  signinButton.addEventListener("click", async () => {
+    const email =
+      document.getElementById("signup-email").value.trim();
+    const password =
+      document.getElementById("signup-password").value;
 
     if (!email || !password) {
       signupMessage.textContent =
@@ -559,7 +589,7 @@ if (!window.supabase) {
     signupMessage.textContent = "Signing in...";
 
     try {
-      const { error } =
+      const { data, error } =
         await horlardortSupabase.auth.signInWithPassword({
           email,
           password
@@ -567,8 +597,9 @@ if (!window.supabase) {
 
       if (error) throw error;
 
+      updatePage(data.session);
       signupMessage.textContent =
-        "You're signed in! Welcome back to Horlardort Entertainment.";
+        "Welcome back to Horlardort Entertainment!";
     } catch (error) {
       signupMessage.textContent =
         "Sign-in failed: " + error.message;
@@ -576,6 +607,9 @@ if (!window.supabase) {
   });
 }
 </script>
+
+
+</div>
 
 
 </body>
