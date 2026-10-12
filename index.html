@@ -119,10 +119,18 @@ footer p { margin: 8px 0; }
 
 <div id="main-site" hidden>
 
+
 <header>
 
   <div class="brand">HORLARDORT <span>ENTERTAINMENT</span></div>
+
+  <button id="signout-button" type="button"
+    style="background:#a855f7;color:white;border:0;padding:10px 14px;border-radius:8px;cursor:pointer;">
+    Sign Out
+  </button>
+
   <nav>
+
     <a href="#home">Home</a>
     <a href="#explore">Explore</a>
     <a href="#afrobeats">Music</a>
@@ -130,6 +138,73 @@ footer p { margin: 8px 0; }
     <a href="#about">About</a>
   </nav>
 </header>
+
+<section id="member-community" style="padding:24px 6%;background:#100b1c;color:white;">
+  <h2>👤 My Profile</h2>
+  <p>Set up your Horlardort Entertainment member profile.</p>
+
+  <div style="max-width:520px;background:#1c142b;padding:18px;border-radius:14px;">
+    <img id="profile-preview" alt="Your profile picture"
+      style="width:100px;height:100px;border-radius:50%;object-fit:cover;background:#382747;display:block;margin-bottom:12px;">
+
+    <label for="profile-picture">Profile picture</label>
+    <input id="profile-picture" type="file" accept="image/*"
+      style="display:block;width:100%;margin:10px 0 16px;">
+
+    <label for="profile-name">Display name</label>
+    <input id="profile-name" maxlength="50" placeholder="Your display name"
+      style="display:block;width:100%;padding:12px;margin:8px 0 16px;">
+
+    <label for="profile-bio">Bio</label>
+    <textarea id="profile-bio" maxlength="300" placeholder="Tell other members about yourself"
+      style="display:block;width:100%;min-height:90px;padding:12px;margin:8px 0 16px;"></textarea>
+
+    <label for="profile-dob">Date of birth (private)</label>
+    <input id="profile-dob" type="date"
+      style="display:block;width:100%;padding:12px;margin:8px 0 16px;">
+
+    <button id="save-profile" type="button"
+      style="background:#a855f7;color:white;border:0;border-radius:8px;padding:12px 18px;">
+      Save Profile
+    </button>
+    <p id="profile-status" role="status" aria-live="polite"></p>
+  </div>
+
+  <hr style="border-color:#382747;margin:28px 0;">
+
+  <h2>👥 Discover Members</h2>
+  <button id="load-members" type="button"
+    style="background:#a855f7;color:white;border:0;border-radius:8px;padding:12px 18px;">
+    Find Members
+  </button>
+  <div id="member-list" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-top:16px;"></div>
+
+  <hr style="border-color:#382747;margin:28px 0;">
+
+  <h2>💬 Private Chat</h2>
+  <p>Choose a member to view your conversation and send messages.</p>
+
+  <label for="chat-member">Chat with</label>
+  <select id="chat-member" style="display:block;width:100%;max-width:520px;padding:12px;margin:8px 0 16px;">
+    <option value="">Find members first</option>
+  </select>
+
+  <div id="chat-messages" aria-live="polite"
+    style="max-width:520px;min-height:120px;max-height:320px;overflow:auto;background:#1c142b;border-radius:12px;padding:14px;"></div>
+
+  <textarea id="chat-text" maxlength="2000" placeholder="Write a message..."
+    style="display:block;width:100%;max-width:520px;min-height:80px;padding:12px;margin:12px 0;"></textarea>
+
+  <button id="send-message" type="button"
+    style="background:#a855f7;color:white;border:0;border-radius:8px;padding:12px 18px;">
+    Send Message
+  </button>
+  <button id="refresh-chat" type="button"
+    style="background:#382747;color:white;border:0;border-radius:8px;padding:12px 18px;margin:8px;">
+    Refresh Chat
+  </button>
+  <p id="chat-status" role="status" aria-live="polite"></p>
+</section>
 
 <main>
   <section class="hero" id="home">
@@ -495,9 +570,7 @@ if ("serviceWorker" in navigator) {
 
 
 <script>
-const SUPABASE_URL = "https://ewlefcdktsffdljcaqje.supabase.co";
-
-// Keep your existing publishable key between these quotes.
+ const SUPABASE_URL = "https://ewlefcdktsffdljcaqje.supabase.co";
 const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_5XeCzZBYZ9bLt4z1S6xY5w_CIegM0VC";
 
 const signupForm = document.getElementById("signup-form");
@@ -505,6 +578,26 @@ const signupMessage = document.getElementById("signup-message");
 const signinButton = document.getElementById("signin-button");
 const mainSite = document.getElementById("main-site");
 const memberAccount = document.getElementById("member-account");
+const signoutButton = document.getElementById("signout-button");
+
+const profilePicture = document.getElementById("profile-picture");
+const profilePreview = document.getElementById("profile-preview");
+const profileName = document.getElementById("profile-name");
+const profileBio = document.getElementById("profile-bio");
+const profileDob = document.getElementById("profile-dob");
+const saveProfileButton = document.getElementById("save-profile");
+const profileStatus = document.getElementById("profile-status");
+
+const loadMembersButton = document.getElementById("load-members");
+const memberList = document.getElementById("member-list");
+const chatMember = document.getElementById("chat-member");
+const chatMessages = document.getElementById("chat-messages");
+const chatText = document.getElementById("chat-text");
+const sendMessageButton = document.getElementById("send-message");
+const refreshChatButton = document.getElementById("refresh-chat");
+const chatStatus = document.getElementById("chat-status");
+
+let currentUser = null;
 
 function updatePage(session) {
   const signedIn = Boolean(session);
@@ -512,6 +605,7 @@ function updatePage(session) {
   mainSite.hidden = !signedIn;
   memberAccount.hidden = signedIn;
   memberAccount.style.display = signedIn ? "none" : "block";
+  currentUser = session ? session.user : null;
 }
 
 if (!window.supabase) {
@@ -523,48 +617,109 @@ if (!window.supabase) {
     SUPABASE_PUBLISHABLE_KEY
   );
 
-  horlardortSupabase.auth.getSession().then(({ data, error }) => {
-    if (error) {
-      signupMessage.textContent =
-        "Could not check sign-in status. Please refresh.";
-      updatePage(null);
-      return;
+  // Create a profile for members who do not have one yet.
+  async function ensureProfile(user) {
+    const { data, error } = await horlardortSupabase
+      .from("profiles")
+      .select("id")
+      .eq("id", user.id)
+      .maybeSingle();
+
+    if (error) throw error;
+
+    if (!data) {
+      const { error: insertError } = await horlardortSupabase
+        .from("profiles")
+        .insert({
+          id: user.id,
+          display_name: "",
+          bio: "",
+          avatar_url: null
+        });
+
+      if (insertError) throw insertError;
     }
+  }
 
-    updatePage(data.session);
-  });
+  async function getPictureUrl(path) {
+    if (!path) return "";
 
-  horlardortSupabase.auth.onAuthStateChange(
-    (_event, session) => {
-      updatePage(session);
+    const { data, error } = await horlardortSupabase
+      .storage
+      .from("profile-pictures")
+      .createSignedUrl(path, 3600);
+
+    if (error) return "";
+    return data.signedUrl;
+  }
+
+  // Load the signed-in member's profile and private birthday.
+  async function loadMyProfile() {
+    if (!currentUser) return;
+
+    const { data, error } = await horlardortSupabase
+      .from("profiles")
+      .select("display_name, bio, avatar_url")
+      .eq("id", currentUser.id)
+      .maybeSingle();
+
+    if (error) throw error;
+
+    profileName.value = data?.display_name || "";
+    profileBio.value = data?.bio || "";
+
+    profilePreview.src = await getPictureUrl(data?.avatar_url);
+    profilePreview.style.display = data?.avatar_url ? "block" : "none";
+
+    const { data: privateData, error: privateError } =
+      await horlardortSupabase
+        .from("profile_private")
+        .select("date_of_birth")
+        .eq("user_id", currentUser.id)
+        .maybeSingle();
+
+    if (privateError) throw privateError;
+
+    profileDob.value = privateData?.date_of_birth || "";
+  }
+
+  async function initializeMember() {
+    if (!currentUser) return;
+
+    try {
+      await ensureProfile(currentUser);
+      await loadMyProfile();
+      profileStatus.textContent = "Your profile is ready.";
+    } catch (error) {
+      profileStatus.textContent =
+        "Could not load your profile: " + error.message;
     }
-  );
+  }
 
+  // Sign up.
   signupForm.addEventListener("submit", async (event) => {
     event.preventDefault();
 
-    const email =
-      document.getElementById("signup-email").value.trim();
-    const password =
-      document.getElementById("signup-password").value;
+    const email = document.getElementById("signup-email").value.trim();
+    const password = document.getElementById("signup-password").value;
 
     signupMessage.textContent = "Creating your account...";
 
     try {
-      const { data, error } =
-        await horlardortSupabase.auth.signUp({
-          email,
-          password,
-          options: {
-            emailRedirectTo:
-              "https://horlardort.github.io/Horlardort-Entertainment-/"
-          }
-        });
+      const { data, error } = await horlardortSupabase.auth.signUp({
+        email,
+        password,
+        options: {
+          emailRedirectTo:
+            "https://horlardort.github.io/Horlardort-Entertainment-/"
+        }
+      });
 
       if (error) throw error;
 
       if (data.session) {
         updatePage(data.session);
+        await initializeMember();
         signupMessage.textContent =
           "Welcome to Horlardort Entertainment!";
       } else {
@@ -577,15 +732,13 @@ if (!window.supabase) {
     }
   });
 
+  // Sign in.
   signinButton.addEventListener("click", async () => {
-    const email =
-      document.getElementById("signup-email").value.trim();
-    const password =
-      document.getElementById("signup-password").value;
+    const email = document.getElementById("signup-email").value.trim();
+    const password = document.getElementById("signup-password").value;
 
     if (!email || !password) {
-      signupMessage.textContent =
-        "Enter your email and password first.";
+      signupMessage.textContent = "Enter your email and password first.";
       return;
     }
 
@@ -601,11 +754,314 @@ if (!window.supabase) {
       if (error) throw error;
 
       updatePage(data.session);
-      signupMessage.textContent =
-        "Welcome back to Horlardort Entertainment!";
+      await initializeMember();
+      signupMessage.textContent = "Welcome back!";
     } catch (error) {
       signupMessage.textContent =
         "Sign-in failed: " + error.message;
+    }
+  });
+
+  // Sign out.
+  signoutButton.addEventListener("click", async () => {
+    signoutButton.disabled = true;
+
+    try {
+      const { error } = await horlardortSupabase.auth.signOut();
+      if (error) throw error;
+
+      updatePage(null);
+      profileStatus.textContent = "";
+      chatStatus.textContent = "";
+      signupMessage.textContent = "You have signed out.";
+    } catch (error) {
+      alert("Sign-out failed: " + error.message);
+    } finally {
+      signoutButton.disabled = false;
+    }
+  });
+
+  // Save profile details and upload an optional profile picture.
+  saveProfileButton.addEventListener("click", async () => {
+    if (!currentUser) {
+      profileStatus.textContent = "Please sign in first.";
+      return;
+    }
+
+    saveProfileButton.disabled = true;
+    profileStatus.textContent = "Saving your profile...";
+
+    try {
+      const { data: existing, error: readError } =
+        await horlardortSupabase
+          .from("profiles")
+          .select("avatar_url")
+          .eq("id", currentUser.id)
+          .maybeSingle();
+
+      if (readError) throw readError;
+
+      let avatarPath = existing?.avatar_url || null;
+      const file = profilePicture.files[0];
+
+      if (file) {
+        if (!file.type.startsWith("image/")) {
+          throw new Error("Please choose an image file.");
+        }
+
+        if (file.size > 5 * 1024 * 1024) {
+          throw new Error("Please choose an image smaller than 5 MB.");
+        }
+
+        const extension =
+          file.name.split(".").pop().toLowerCase().replace(/[^a-z0-9]/g, "") ||
+          "jpg";
+
+        const path =
+          currentUser.id + "/" + Date.now() + "." + extension;
+
+        const { error: uploadError } = await horlardortSupabase
+          .storage
+          .from("profile-pictures")
+          .upload(path, file, {
+            contentType: file.type,
+            upsert: false
+          });
+
+        if (uploadError) throw uploadError;
+        avatarPath = path;
+      }
+
+      const { error: profileError } = await horlardortSupabase
+        .from("profiles")
+        .upsert({
+          id: currentUser.id,
+          display_name: profileName.value.trim(),
+          bio: profileBio.value.trim(),
+          avatar_url: avatarPath,
+          updated_at: new Date().toISOString()
+        }, { onConflict: "id" });
+
+      if (profileError) throw profileError;
+
+      // Birthday is stored separately and is not shown in member listings.
+      const { error: birthdayError } = await horlardortSupabase
+        .from("profile_private")
+        .upsert({
+          user_id: currentUser.id,
+          date_of_birth: profileDob.value || null
+        }, { onConflict: "user_id" });
+
+      if (birthdayError) throw birthdayError;
+
+      profilePicture.value = "";
+      await loadMyProfile();
+
+      profileStatus.textContent = "Profile saved successfully!";
+    } catch (error) {
+      profileStatus.textContent =
+        "Could not save profile: " + error.message;
+    } finally {
+      saveProfileButton.disabled = false;
+    }
+  });
+
+  // Find members and let the signed-in user choose someone to chat with.
+  loadMembersButton.addEventListener("click", async () => {
+    if (!currentUser) return;
+
+    loadMembersButton.disabled = true;
+    memberList.replaceChildren();
+    chatMember.innerHTML = '<option value="">Choose a member</option>';
+
+    try {
+      const { data, error } = await horlardortSupabase
+        .from("profiles")
+        .select("id, display_name, bio, avatar_url")
+        .neq("id", currentUser.id)
+        .order("display_name");
+
+      if (error) throw error;
+
+      if (!data.length) {
+        memberList.textContent =
+          "No other member profiles found yet. Invite a friend to join!";
+        return;
+      }
+
+      for (const member of data) {
+        const option = document.createElement("option");
+        option.value = member.id;
+        option.textContent = member.display_name || "Horlardort member";
+        chatMember.appendChild(option);
+
+        const card = document.createElement("div");
+        card.style.cssText =
+          "background:#1c142b;padding:16px;border-radius:12px;color:white;";
+
+        const picture = document.createElement("img");
+        picture.alt = "Member profile picture";
+        picture.style.cssText =
+          "width:72px;height:72px;border-radius:50%;object-fit:cover;";
+
+        const pictureUrl = await getPictureUrl(member.avatar_url);
+        if (pictureUrl) picture.src = pictureUrl;
+        card.appendChild(picture);
+
+        const name = document.createElement("h3");
+        name.textContent = member.display_name || "Horlardort member";
+        card.appendChild(name);
+
+        const bio = document.createElement("p");
+        bio.textContent = member.bio || "No bio added yet.";
+        card.appendChild(bio);
+
+        const chatButton = document.createElement("button");
+        chatButton.type = "button";
+        chatButton.textContent = "Chat with member";
+        chatButton.style.cssText =
+          "background:#a855f7;color:white;border:0;border-radius:8px;padding:10px 12px;";
+
+        chatButton.addEventListener("click", async () => {
+          chatMember.value = member.id;
+          await loadChat();
+          chatText.focus();
+        });
+
+        card.appendChild(chatButton);
+        memberList.appendChild(card);
+      }
+    } catch (error) {
+      memberList.textContent =
+        "Could not load members: " + error.message;
+    } finally {
+      loadMembersButton.disabled = false;
+    }
+  });
+
+  // Load messages between the current member and the selected member.
+  async function loadChat() {
+    if (!currentUser || !chatMember.value) {
+      chatMessages.textContent = "Choose a member to view your chat.";
+      return;
+    }
+
+    const otherId = chatMember.value;
+    chatStatus.textContent = "Loading messages...";
+    chatMessages.replaceChildren();
+
+    try {
+      const filter =
+        "and(sender_id.eq." + currentUser.id +
+        ",recipient_id.eq." + otherId + ")," +
+        "and(sender_id.eq." + otherId +
+        ",recipient_id.eq." + currentUser.id + ")";
+
+      const { data, error } = await horlardortSupabase
+        .from("messages")
+        .select("sender_id, recipient_id, body, created_at")
+        .or(filter)
+        .order("created_at", { ascending: true });
+
+      if (error) throw error;
+
+      if (!data.length) {
+        chatMessages.textContent =
+          "No messages yet. Start the conversation!";
+      } else {
+        for (const message of data) {
+          const item = document.createElement("div");
+          item.style.cssText =
+            "padding:10px;margin:8px 0;background:#382747;border-radius:8px;overflow-wrap:anywhere;";
+
+          const sender = document.createElement("strong");
+          sender.textContent =
+            message.sender_id === currentUser.id ? "You: " : "Member: ";
+
+          const body = document.createElement("span");
+          body.textContent = message.body;
+
+          const time = document.createElement("small");
+          time.style.display = "block";
+          time.style.marginTop = "6px";
+          time.textContent = new Date(message.created_at).toLocaleString();
+
+          item.append(sender, body, time);
+          chatMessages.appendChild(item);
+        }
+
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+      }
+
+      chatStatus.textContent = "Chat updated.";
+    } catch (error) {
+      chatStatus.textContent =
+        "Could not load messages: " + error.message;
+    }
+  }
+
+  chatMember.addEventListener("change", loadChat);
+  refreshChatButton.addEventListener("click", loadChat);
+
+  // Send a private message.
+  sendMessageButton.addEventListener("click", async () => {
+    if (!currentUser) return;
+
+    const recipientId = chatMember.value;
+    const body = chatText.value.trim();
+
+    if (!recipientId) {
+      chatStatus.textContent = "Choose a member first.";
+      return;
+    }
+
+    if (!body) {
+      chatStatus.textContent = "Write a message first.";
+      return;
+    }
+
+    sendMessageButton.disabled = true;
+    chatStatus.textContent = "Sending message...";
+
+    try {
+      const { error } = await horlardortSupabase
+        .from("messages")
+        .insert({
+          sender_id: currentUser.id,
+          recipient_id: recipientId,
+          body: body
+        });
+
+      if (error) throw error;
+
+      chatText.value = "";
+      await loadChat();
+      chatStatus.textContent = "Message sent!";
+    } catch (error) {
+      chatStatus.textContent =
+        "Could not send message: " + error.message;
+    } finally {
+      sendMessageButton.disabled = false;
+    }
+  });
+
+  // Restore the current sign-in state when the site opens.
+  horlardortSupabase.auth.onAuthStateChange((_event, session) => {
+    updatePage(session);
+  });
+
+  horlardortSupabase.auth.getSession().then(async ({ data, error }) => {
+    if (error) {
+      signupMessage.textContent =
+        "Could not check sign-in status. Refresh and try again.";
+      updatePage(null);
+      return;
+    }
+
+    updatePage(data.session);
+
+    if (data.session) {
+      await initializeMember();
     }
   });
 }
