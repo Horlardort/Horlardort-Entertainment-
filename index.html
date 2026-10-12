@@ -460,8 +460,9 @@ if ("serviceWorker" in navigator) {
   });
 }
 </script>
- 
-<section id="member-account" style="max-width:420px;margin:30px auto;padding:20px;background:#211638;border-radius:16px;color:white;">
+
+ </div>
+<section id="member-account" style="display:block;max-width:420px;margin:30px auto;padding:20px;background:#211638;border-radius:16px;color:white;">
   <h2>Join Horlardort Entertainment</h2>
   <p>Create an account to join the community.</p>
 
@@ -507,8 +508,10 @@ const memberAccount = document.getElementById("member-account");
 
 function updatePage(session) {
   const signedIn = Boolean(session);
+
   mainSite.hidden = !signedIn;
   memberAccount.hidden = signedIn;
+  memberAccount.style.display = signedIn ? "none" : "block";
 }
 
 if (!window.supabase) {
@@ -607,10 +610,6 @@ if (!window.supabase) {
   });
 }
 </script>
-
-
-</div>
-
 
 </body>
 </html>
